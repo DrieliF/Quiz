@@ -35,12 +35,41 @@ let questions = [
     choice3: 'Astana',
     choice4: 'Asgabate',
     answer: 4
-  }
+  },
+
+  {
+    question: 'Qual país tem mais ilhas no mundo ?',
+    choice1: 'Japão',
+    choice2: 'Suécia',
+    choice3: 'Inglaterra',
+    choice4: 'Canáda',
+    answer: 2
+  },
+
+  {
+  question: 'Qual é o animal nacional da Austrália ?',
+    choice1: 'Canguru vermelho',
+    choice2: 'Demonio Tazmania',
+    choice3: 'Dragão de Komodo',
+    choice4: 'Peixe palhaço',
+    answer: 1
+  },
+
+  {
+    question: 'Onde é o lugar mais baixo do planeta Terra?',
+      choice1: 'Fossa de Tonga',
+      choice2: 'Fossa das Filipinas',
+      choice3: 'Fossa das Marianas',
+      choice4: 'Grand Cânion',
+      answer: 3
+    },
+
+  
 ]
 
 //CONSTANTS
 const CORRECT_BONUS = 10
-const MAX_QUESTIONS = 3
+const MAX_QUESTIONS = 6
 
 startGame = () => {
   questionCounter = 0
