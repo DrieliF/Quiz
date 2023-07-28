@@ -2,7 +2,9 @@ const question = document.getElementById('question')
 const choices = Array.from(document.getElementsByClassName('choice-text'))
 const progressText = document.getElementById('progressText')
 const scoreText = document.getElementById('score')
-const progressBarFull = document.getElementById("progressBarFull");
+const progressBarFull = document.getElementById('progressBarFull')
+const loader = document.getElementById('loader')
+const game = document.getElementById('game')
 
 //-----VARIABLES
 let currentQuestion = {}
@@ -11,72 +13,50 @@ let score = 0
 let questionCounter = 0
 let availableQuestions = []
 
-let questions = [
-  {
-    question: 'Qual é o menor país do mundo?',
-    choice1: 'Malta',
-    choice2: 'Tuvalu',
-    choice3: 'Vaticano',
-    choice4: 'Liechtenstein',
-    answer: 3
-  },
-  {
-    question: 'Qual é o rio mais longo do mundo ?',
-    choice1: 'Rio Nilo',
-    choice2: 'Rio Lena',
-    choice3: 'Rio Amazonas',
-    choice4: 'Rio Níger ',
-    answer: 1
-  },
-  {
-    question: 'Qual é a capital do Turcomenistão ?',
-    choice1: 'Awaza',
-    choice2: 'Ulan Bator',
-    choice3: 'Astana',
-    choice4: 'Asgabate',
-    answer: 4
-  },
+//let questions= [];
 
-  {
-    question: 'Qual país tem mais ilhas no mundo ?',
-    choice1: 'Japão',
-    choice2: 'Suécia',
-    choice3: 'Inglaterra',
-    choice4: 'Canáda',
-    answer: 2
-  },
 
-  {
-  question: 'Qual é o animal nacional da Austrália ?',
-    choice1: 'Canguru vermelho',
-    choice2: 'Demonio Tazmania',
-    choice3: 'Dragão de Komodo',
-    choice4: 'Peixe palhaço',
-    answer: 1
-  },
+fetch('https://opentdb.com/api.php?amount=10&difficulty=medium&type=multiple')
+  .then(res => {
+    return res.json()
+  })
+  .then(loadedQuestions => {
+    questions = loadedQuestions.results.map(loadedQuestion => {
+      const formattedQuestion = {
+        question: loadedQuestion.question
+      }
 
-  {
-    question: 'Onde é o lugar mais baixo do planeta Terra?',
-      choice1: 'Fossa de Tonga',
-      choice2: 'Fossa das Filipinas',
-      choice3: 'Fossa das Marianas',
-      choice4: 'Grand Cânion',
-      answer: 3
-    },
+      const answerChoices = [...loadedQuestion.incorrect_answers]
+      formattedQuestion.answer = Math.floor(Math.random() * 3) + 1
+      answerChoices.splice(
+        formattedQuestion.answer - 1,
+        0,
+        loadedQuestion.correct_answer
+      )
 
-  
-]
+      answerChoices.forEach((choice, index) => {
+        formattedQuestion['choice' + (index + 1)] = choice
+      })
+      return formattedQuestion
+    })
+
+    startGame()
+  })
+  .catch(err => {
+    console.error(err)
+  })
 
 //CONSTANTS
 const CORRECT_BONUS = 10
-const MAX_QUESTIONS = 6
+const MAX_QUESTIONS = 10
 
 startGame = () => {
   questionCounter = 0
   score = 0
   availableQuestions = [...questions] //array
-  //console.log(availableQuestions);
   getNewQuestion()
+  game.classList.remove('hidden')
+  loader.classList.add('hidden')
 }
 
 getNewQuestion = () => {
@@ -87,9 +67,9 @@ getNewQuestion = () => {
 
   questionCounter++ // incremento
   progressText.innerText = `Question ${questionCounter}/${MAX_QUESTIONS}`
-   
+
   //atualiza a barra de progresso
-   progressBarFull.style.width = `${(questionCounter / MAX_QUESTIONS) * 100}%`;
+  progressBarFull.style.width = `${(questionCounter / MAX_QUESTIONS) * 100}%`
 
   const questionIndex = Math.floor(Math.random() * availableQuestions.length) // math.floor --> arredonda / random
   currentQuestion = availableQuestions[questionIndex]
